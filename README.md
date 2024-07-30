@@ -2,4 +2,7 @@
 
 Work in progress
 
-A Tiny Dungeon game using assets from Kenny: https://kenney.nl/assets/tiny-dungeon
+A Tiny Dungeon game
+
+* assets from Kenney: https://kenney.nl/assets/tiny-dungeon
+* music ... not yet

@@ -156,9 +156,9 @@ flip_h = true
 position = Vector2(1, -3.5)
 shape = SubResource("RectangleShape2D_fnrob")
 
-[node name="DamageArea2D" type="Area2D" parent="."]
+[node name="PlayerDamageArea2D" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDamageArea2D"]
 position = Vector2(0, -8)
 shape = SubResource("CapsuleShape2D_wc0th")
 
@@ -168,4 +168,8 @@ libraries = {
 "": SubResource("AnimationLibrary_im4hx")
 }
 
-[connection signal="body_entered" from="DamageArea2D" to="." method="_on_damage_area_2d_body_entered"]
+[node name="Line2D" type="Line2D" parent="."]
+width = 2.0
+default_color = Color(1, 0, 0, 1)
+
+[connection signal="body_entered" from="PlayerDamageArea2D" to="." method="_on_damage_area_2d_body_entered"]

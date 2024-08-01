@@ -29,23 +29,37 @@ func __looking_down():
 	looking_front = false
 	looking_up = false
 	looking_down = true
-
+	
+func _ready():
+	get_node("Line2D").add_point(Vector2(0,0))
+	get_node("Line2D").add_point(self.velocity)
+	
 func _physics_process(delta):
 	# Add the gravity.
 	#if not is_on_floor():
 		#velocity.y += gravity * delta
-		
+	var new_pos = Vector2(self.velocity)
+	new_pos.normalized()
+	#get_node("Line2D").set_point_position(1, self.global_position)
+	get_node("Line2D").set_point_position(0, new_pos)
+
 	if hitted_by_enemy == true:
 		velocity *= damping
 		# Stop the enemy completely if the velocity is very small
 		if velocity.length() < 1:
 			velocity = Vector2.ZERO
 			hitted_by_enemy = false
-			self.rotate(90)
 	else:
-		# Handle jump.
 		if Input.is_action_just_pressed("ui_accept"):
-			get_node("AnimationPlayer").play("strong_sword_attack")
+			var animation = get_node("AnimationPlayer")
+			if animation.is_playing():
+				if animation.current_animation == "strong_sword_attack":
+					animation.queue("sword_attack_front")
+				elif animation.current_animation == "sword_attack_front":
+					animation.queue("sword_attack_down")
+			else: 
+				animation.play("strong_sword_attack")
+			
 			#if looking_front:
 				#get_node("AnimationPlayer").play("sword_attack_front")
 			#if looking_up:
@@ -97,13 +111,17 @@ func _physics_process(delta):
 			velocity = Vector2.ZERO
 
 	move_and_slide()
+	
+func hitted_by(body):
+	hitted_by_enemy = true
+	var direction = self.global_position - body.global_position
+	direction = direction.normalized()
+	var push_strength = 300  # Adjust the strength of the push
+	velocity += direction * push_strength
 
 func _on_damage_area_2d_body_entered(body):
-	print("Player hitted by ", body.name)
+	print("Player hitted by body.name=", body)
 	if body.name == "Enemy":
-		hitted_by_enemy = true
-		var direction = self.global_position - body.global_position
-		direction = direction.normalized()
-		var push_strength = 300  # Adjust the strength of the push
-		velocity += direction * push_strength
-		self.rotate(-90)
+		hitted_by(body)
+	else:
+		hitted_by_enemy = false

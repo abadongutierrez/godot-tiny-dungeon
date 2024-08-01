@@ -13,6 +13,7 @@ func __spawn_enemy():
 	#print("New enemy!")
 	var enemy = preload("res://scenes/enemy.tscn")
 	var new_enemy = enemy.instantiate()
+	new_enemy.name = "Enemy"
 	var rng = RandomNumberGenerator.new()
 	new_enemy.position = Vector2(rng.randi_range(500, 100), rng.randi_range(300, 500))
 	get_node("Node").add_child(new_enemy)

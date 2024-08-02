@@ -6,16 +6,12 @@ var damping = 0.9
 var speed = 100
 var hitted_by_player = false
 
-var api_key = "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"
+var api_key = "key"
 var api_url = "https://api.openai.com/v1/engines/davinci-codex/completions"
 
 @onready var player = get_node("/root/Main/Player")
 
 func _ready():
-<<<<<<< Updated upstream
-	get_node("Line2D").add_point(Vector2(0,0))
-	get_node("Line2D").add_point(self.velocity)
-=======
 	var decision = make_decision(get_game_state())
 
 func get_game_state():
@@ -67,14 +63,8 @@ func make_decision(state):
 	
 	return null
 
->>>>>>> Stashed changes
 
 func _physics_process(delta):
-	var new_pos = Vector2(self.velocity)
-	new_pos.normalized()
-	#get_node("Line2D").set_point_position(1, self.global_position)
-	get_node("Line2D").set_point_position(0, new_pos)
-	
 	# your normal direction/velocity calculation here
 	# after you have your final velocity value, you just need to add knockback vector to it
 	# move_toward will reduce knockback vector each frame/call by resistance amount, i.e. bring knockback to a stop
@@ -87,9 +77,6 @@ func _physics_process(delta):
 		if velocity.length() < 1:
 			velocity = Vector2.ZERO
 			self.queue_free()
-	else:
-		velocity = Vector2.ZERO
-	
 	move_and_slide()
 
 func attack_player():
@@ -105,7 +92,7 @@ func idle_state():
 	move_and_slide()
 
 func _on_area_2d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
-	print("area.name=", area.name)
+	print(area.name)
 	if area.name == "PlayerSwordArea2D":
 		hitted_by_player = true
 		# direction_to returns a normalized vector, i.e. < 1 pixel, so you want to multiply that by how far you want enemy to be knocked back
@@ -115,7 +102,3 @@ func _on_area_2d_area_shape_entered(area_rid, area, area_shape_index, local_shap
 		direction = direction.normalized()
 		var push_strength = 300  # Adjust the strength of the push
 		velocity += direction * push_strength
-	elif area.name == "PlayerDamageArea2D":
-		player.hitted_by(self)
-	else:
-		hitted_by_player = false

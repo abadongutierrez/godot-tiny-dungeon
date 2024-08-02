@@ -26,8 +26,5 @@ texture = ExtResource("1_ukthq")
 position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_mv0qy")
 
-[node name="Line2D" type="Line2D" parent="."]
-width = 2.0
-default_color = Color(0.309804, 1, 0, 1)
-
 [connection signal="area_shape_entered" from="Area2D" to="." method="_on_area_2d_area_shape_entered"]
+[connection signal="child_entered_tree" from="Area2D/CollisionShape2D" to="." method="_on_collision_shape_2d_child_entered_tree"]

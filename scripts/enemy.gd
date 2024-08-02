@@ -3,13 +3,71 @@ extends CharacterBody2D
 @export var knockback_resistance: float = 1
 var knockback = Vector2.ZERO
 var damping = 0.9
+var speed = 100
 var hitted_by_player = false
+
+var api_key = "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"
+var api_url = "https://api.openai.com/v1/engines/davinci-codex/completions"
 
 @onready var player = get_node("/root/Main/Player")
 
 func _ready():
+<<<<<<< Updated upstream
 	get_node("Line2D").add_point(Vector2(0,0))
 	get_node("Line2D").add_point(self.velocity)
+=======
+	var decision = make_decision(get_game_state())
+
+func get_game_state():
+	var state = {
+		"enemy_position": position,
+		"player_position": player.position,
+		"enemy_health": 100,
+		"player_health": 100,
+		"distance_to_player": position.distance_to(player.position)
+	}
+	return JSON.stringify(state)
+
+func make_decision(state):
+	var http = HTTPClient.new()
+	http.connect_to_host("api.openai.com", 443)
+
+	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+		http.poll()
+		OS.delay_msec(10)
+
+	if http.get_status() != HTTPClient.STATUS_CONNECTED:
+		print("Unable to connect to OpenAI API")
+		return null
+
+	var headers = [
+		"Content-Type: application/json",
+		"Authorization: Bearer " + api_key
+	]
+	
+	var request_body = {
+		"prompt": "Decide if the enemy should attack based on the following game state: " + state,
+		"max_tokens": 5,
+		"temperature": 0.5
+	}
+	
+	http.request_raw(HTTPClient.METHOD_POST, api_url, headers, JSON.stringify(request_body).to_utf8_buffer())
+	
+	while http.get_status() == HTTPClient.STATUS_REQUESTING:
+		http.poll()
+		OS.delay_msec(10)
+
+	if http.get_status() == HTTPClient.STATUS_BODY:
+		var response = http.read_response_body_chunk()
+		var json = JSON.new()
+		var result = json.parse(response.get_string_from_utf8())
+		print("response=", response, ", result=", result)
+		#if result != null && result["choices"] != null && result["choices"][0] != null && result["choices"][0]["text"] != null:
+			#return result["choices"][0]["text"].strip_edges()
+	
+	return null
+
+>>>>>>> Stashed changes
 
 func _physics_process(delta):
 	var new_pos = Vector2(self.velocity)
@@ -33,7 +91,19 @@ func _physics_process(delta):
 		velocity = Vector2.ZERO
 	
 	move_and_slide()
-		
+
+func attack_player():
+	# Implement the attack logic
+	print("Attacking player")
+	velocity = (player.position - position).normalized() * speed
+	move_and_slide()
+
+func idle_state():
+	# Implement idle behavior
+	print("Idling")
+	velocity = Vector2.ZERO
+	move_and_slide()
+
 func _on_area_2d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	print("area.name=", area.name)
 	if area.name == "PlayerSwordArea2D":

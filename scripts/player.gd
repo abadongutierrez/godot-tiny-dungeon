@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 
-const SPEED = 50.0
+const SPEED = 80.0
 const JUMP_VELOCITY = -400.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -14,6 +14,8 @@ var sprite_size = 16
 
 var damping = 0.9
 var hitted_by_enemy = false
+
+@onready var animation_player = $AnimationPlayer
 
 func __looking_front():
 	looking_front = true
@@ -51,6 +53,7 @@ func _physics_process(delta):
 			hitted_by_enemy = false
 	else:
 		if Input.is_action_just_pressed("ui_accept"):
+<<<<<<< Updated upstream
 			var animation = get_node("AnimationPlayer")
 			if animation.is_playing():
 				if animation.current_animation == "strong_sword_attack":
@@ -60,6 +63,9 @@ func _physics_process(delta):
 			else: 
 				animation.play("strong_sword_attack")
 			
+=======
+			animation_player.play("strong_sword_attack")
+>>>>>>> Stashed changes
 			#if looking_front:
 				#get_node("AnimationPlayer").play("sword_attack_front")
 			#if looking_up:

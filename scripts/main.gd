@@ -15,6 +15,6 @@ func __spawn_enemy():
 	var new_enemy = enemy.instantiate()
 	new_enemy.name = "Enemy"
 	var rng = RandomNumberGenerator.new()
-	new_enemy.position = Vector2(rng.randi_range(500, 100), rng.randi_range(300, 500))
+	new_enemy.position = Vector2(rng.randi_range(200, 300), rng.randi_range(150, 300))
 	get_node("Node").add_child(new_enemy)
 

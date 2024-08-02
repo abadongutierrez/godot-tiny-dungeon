@@ -6,7 +6,7 @@ var damping = 0.9
 var speed = 100
 var hitted_by_player = false
 
-var api_key = "key"
+var api_key = ""
 var api_url = "https://api.openai.com/v1/engines/davinci-codex/completions"
 
 @onready var player = get_node("/root/Main/Player")
